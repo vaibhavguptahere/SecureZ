@@ -1,27 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
-
-  // form state for password manager
   const [form, setForm] = useState({site: "", username: "", password: ""});
+  const [passwordArray, setPasswordArray] = useState([]);
 
-  // shwoing password and saving password
-  const savePassword = () => {
-    console.log(form);
-  }
-
+  
   // Saving password to the local storage
   const handleChange = (e) => {
     setForm({...form, [e.target.name]: e.target.value});
   }
+  
+  // shwoing password and saving password
+  const savePassword = () => {
+    setPasswordArray([...passwordArray, form]);
+    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
+    console.log([...passwordArray, form]);
+  }
 
   // Saving password to the local storage
-  const [passwords, setPasswordArray] = useState([]);
   useEffect(() => {
     let passwords = localStorage.getItem("passwords");
-    let passwordArray;
     if (passwords) {
       setPasswordArray(JSON.parse(passwords));
     }
