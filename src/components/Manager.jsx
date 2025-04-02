@@ -82,25 +82,25 @@ const Manager = () => {
             </div>
           </div>
           <button
-      className="flex justify-center items-center bg-[#211252] w-45 gap-2 font-bold p-2 rounded-2xl hover:text-green-400"
-      onClick={savePassword}
-      disabled={!form.site || !form.username || !form.password}
-    >
-      <lord-icon
-        src="https://cdn.lordicon.com/sbnjyzil.json"
-        trigger="hover"
-        stroke="bold"
-        state="hover-swirl"
-        colors="primary:#ffffff,secondary:#08a88a"
-      ></lord-icon>
-      Add Password
-    </button>
+            className="flex justify-center items-center bg-[#211252] w-45 gap-2 font-bold p-2 rounded-2xl hover:text-green-400"
+            onClick={savePassword}
+            disabled={!form.site || !form.username || !form.password}
+          >
+            <lord-icon
+              src="https://cdn.lordicon.com/sbnjyzil.json"
+              trigger="hover"
+              stroke="bold"
+              state="hover-swirl"
+              colors="primary:#ffffff,secondary:#08a88a"
+            ></lord-icon>
+            Add Password
+          </button>
         </div>
       </div>
 
       {/* Password List Section */}
       <div>
-      <h1 className="text-4xl font-bold text-center mt-4 mb-6">
+        <h1 className="text-4xl font-bold text-center mt-4 mb-6 passwords">
           <span className="text-green-400">&lt;</span>
           <span className="text-white">Your </span>
           <span className="text-green-400">Passwords/&gt;</span>
@@ -123,7 +123,7 @@ const Manager = () => {
                 >
                   <td className="border p-4">{item.site}</td>
                   <td className="border p-4">{item.username}</td>
-                  <td className="border p-4" type="password">{item.password}</td>
+                  <td className="border p-4">{item.password}</td>
                 </tr>
               ))}
             </tbody>
