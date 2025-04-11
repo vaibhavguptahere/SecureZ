@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +17,17 @@ const Manager = () => {
     setPasswordArray([...passwordArray, form]);
     localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
     console.log([...passwordArray, form]);
+    toast.success('New Password Added', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
   };
 
   // Saving password to the local storage
@@ -26,8 +38,71 @@ const Manager = () => {
     }
   }, []);
 
+  // Copying text to the clipboard
+  const copyText = (text) => {
+    navigator.clipboard.writeText(text);
+    toast.info('Copied to Clipboard!', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
+      
+  };
+
+    // Editing text from the local storage
+    const editText = (item) => {
+      const updatedArray = passwordArray.map((password) => {
+        if (password.site === item.site) {
+          return { ...password, ...form };
+        }
+        return password;
+      });
+      setPasswordArray(updatedArray);
+      localStorage.setItem("passwords", JSON.stringify(updatedArray));
+    };
+
+  // Deleting text from the local storage
+  const deleteText = (item) => {
+    const updatedArray = passwordArray.filter(
+      (password) => password.site !== item.site
+    );
+    setPasswordArray(updatedArray);
+    localStorage.setItem("passwords", JSON.stringify(updatedArray));
+    toast.error('Password Deleted', {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      });
+  };
+
+
   return (
     <div>
+          <ToastContainer
+position="bottom-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick={false}
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+transition="Bounce"
+/>
       {/* Background Section Added */}
       <div>
         <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
@@ -125,7 +200,7 @@ const Manager = () => {
                   <td className="border p-3">
                     <div className="flex items-center justify-between gap-2">
                       <span>{item.site}</span>
-                      <div>
+                      <div onClick={()=>{copyText(item.site)}}>
                         <lord-icon
                           src="https://cdn.lordicon.com/zqyyfteh.json"
                           trigger="hover"
@@ -140,7 +215,7 @@ const Manager = () => {
                   <td className="border p-3">
                     <div className="flex items-center justify-between gap-2">
                       <span>{item.username}</span>
-                      <div>
+                      <div onClick={()=>{copyText(item.username)}}>
                         <lord-icon
                           src="https://cdn.lordicon.com/zqyyfteh.json"
                           trigger="hover"
@@ -159,7 +234,7 @@ const Manager = () => {
                   <td className="border p-3">
                     <div className="flex items-center justify-between gap-2">
                       <span>{item.password}</span>
-                      <div className="">
+                      <div onClick={()=>{copyText(item.password)}}>
                         <lord-icon
                           src="https://cdn.lordicon.com/zqyyfteh.json"
                           trigger="hover"
@@ -173,7 +248,7 @@ const Manager = () => {
 
                   <td className="border p-3">
                     <div className="flex gap-4 justify-center items-center">
-                      <div className="edit">
+                      <div className="edit" onClick={()=>{editText(item)}}>
                         <lord-icon
                           src="https://cdn.lordicon.com/exymduqj.json"
                           trigger="hover"
@@ -182,7 +257,8 @@ const Manager = () => {
                           style={{ width: "25px", height: "25px" }}
                         ></lord-icon>
                       </div>
-                      <div className="delete">
+
+                      <div className="delete" onClick={()=>{deleteText(item)}}>  
                         <lord-icon
                           src="https://cdn.lordicon.com/hwjcdycb.json"
                           trigger="morph"
