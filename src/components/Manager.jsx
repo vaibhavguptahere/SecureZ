@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
 const Manager = () => {
@@ -110,20 +110,90 @@ const Manager = () => {
           <table className="w-3/4 border-collapse bg-[#211252] text-white rounded-lg overflow-hidden shadow-lg">
             <thead>
               <tr className="bg-[#111111]">
-                <th className="border p-4 text-left">Website</th>
-                <th className="border p-4 text-left">Username</th>
-                <th className="border p-4 text-left">Password</th>
+                <th className="border p-4 text-center">Website</th>
+                <th className="border p-4 text-center">Username</th>
+                <th className="border p-4 text-center">Password</th>
+                <th className="border p-4 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody> 
               {passwordArray.map((item, e) => (
                 <tr
                   key={e}
-                  className="even:bg-[#1e1e2e] odd:bg-[#28293d] hover:bg-[#3a3b52] transition-all"
+                  className="even:bg-[#1e1e2e] odd:bg-[#28293d] transition-all"
                 >
-                  <td className="border p-4">{item.site}</td>
-                  <td className="border p-4">{item.username}</td>
-                  <td className="border p-4">{item.password}</td>
+                  <td className="border p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span>{item.site}</span>
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/zqyyfteh.json"
+                          trigger="hover"
+                          stroke="bold"
+                          colors="primary:#ffffff,secondary:#08a88a"
+                          style={{ width: "25px", height: "25px" }}
+                        ></lord-icon>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td className="border p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span>{item.username}</span>
+                      <div>
+                        <lord-icon
+                          src="https://cdn.lordicon.com/zqyyfteh.json"
+                          trigger="hover"
+                          stroke="bold"
+                          colors="primary:#ffffff,secondary:#08a88a"
+                          style={{ width: "25px", height: "25px" }}
+                          onlcliclk={() => {
+                            navigator.clipboard.writeText(item.username);
+                            alert("Username copied to clipboard");
+                          }}
+                        ></lord-icon>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td className="border p-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span>{item.password}</span>
+                      <div className="">
+                        <lord-icon
+                          src="https://cdn.lordicon.com/zqyyfteh.json"
+                          trigger="hover"
+                          stroke="bold"
+                          colors="primary:#ffffff,secondary:#08a88a"
+                          style={{ width: "25px", height: "25px" }}
+                        ></lord-icon>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td className="border p-3">
+                    <div className="flex gap-4 justify-center items-center">
+                      <div className="edit">
+                        <lord-icon
+                          src="https://cdn.lordicon.com/exymduqj.json"
+                          trigger="hover"
+                          stroke="bold"
+                          colors="primary:#ffffff,secondary:#08a88a"
+                          style={{ width: "25px", height: "25px" }}
+                        ></lord-icon>
+                      </div>
+                      <div className="delete">
+                        <lord-icon
+                          src="https://cdn.lordicon.com/hwjcdycb.json"
+                          trigger="morph"
+                          stroke="bold"
+                          state="morph-trash-in"
+                          colors="primary:#ffffff,secondary:#08a88a"
+                          style={{ width: "25px", height: "25px" }}
+                        ></lord-icon>
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
