@@ -16,7 +16,7 @@ const Manager = () => {
   // shwoing password and saving password
   const savePassword = () => {
     setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
-    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
+    localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]));
     console.log([...passwordArray, { ...form, id: uuidv4() }]);
     toast.success("New Password Added", {
       position: "bottom-right",
@@ -31,7 +31,7 @@ const Manager = () => {
     });
   };
 
-  // shwoing password and saving password
+  // showing password and saving password
   const deletePassword = (id) => {
     setPasswordArray(passwordArray.filter((item) => item.id !== id));
     localStorage.setItem(
@@ -52,20 +52,9 @@ const Manager = () => {
   };
 
   // Editing text from the local storage
-  const editPassword = (item) => {
-
-
-    toast.success("Password Updated", {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    });
+  const editPassword = (id) => {
+    setForm(passwordArray.filter((item) => item.id === id)[0]);
+    setPasswordArray(passwordArray.filter(item => item.id!==id));
   };
 
   // Copying text to the clipboard
