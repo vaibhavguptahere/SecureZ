@@ -29,11 +29,13 @@ const Manager = () => {
       theme: "dark",
       transition: Bounce,
     });
+    setForm({ site: "", username: "", password: "" });
   };
 
   // showing password and saving password
   const deletePassword = (id) => {
-    setPasswordArray(passwordArray.filter((item) => item.id !== id));
+    if (confirm("Are you sure you want to delete this password?")) {
+      setPasswordArray(passwordArray.filter((item) => item.id !== id));
     localStorage.setItem(
       "passwords",
       JSON.stringify(passwordArray.filter((item) => item.id !== id))
@@ -49,6 +51,9 @@ const Manager = () => {
       theme: "dark",
       transition: Bounce,
     });
+
+    }
+    
   };
 
   // Editing text from the local storage
