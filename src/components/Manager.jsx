@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 const Manager = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,10 +15,10 @@ const Manager = () => {
 
   // shwoing password and saving password
   const savePassword = () => {
-    setPasswordArray([...passwordArray, form]);
+    setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
     localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
-    console.log([...passwordArray, form]);
-    toast.success('New Password Added', {
+    console.log([...passwordArray, { ...form, id: uuidv4() }]);
+    toast.success("New Password Added", {
       position: "bottom-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -27,7 +28,60 @@ const Manager = () => {
       progress: undefined,
       theme: "dark",
       transition: Bounce,
-      });
+    });
+  };
+
+  // shwoing password and saving password
+  const deletePassword = (id) => {
+    setPasswordArray(passwordArray.filter((item) => item.id !== id));
+    localStorage.setItem(
+      "passwords",
+      JSON.stringify(passwordArray.filter((item) => item.id !== id))
+    );
+      toast.error("Password Deleted", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  };
+
+  // Editing text from the local storage
+  const editPassword = (item) => {
+
+
+    toast.success("Password Updated", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  };
+
+  // Copying text to the clipboard
+  const copyText = (text) => {
+    navigator.clipboard.writeText(text);
+    toast.info("Copied to Clipboard!", {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
   };
 
   // Saving password to the local storage
@@ -38,71 +92,21 @@ const Manager = () => {
     }
   }, []);
 
-  // Copying text to the clipboard
-  const copyText = (text) => {
-    navigator.clipboard.writeText(text);
-    toast.info('Copied to Clipboard!', {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-      });
-      
-  };
-
-    // Editing text from the local storage
-    const editText = (item) => {
-      const updatedArray = passwordArray.map((password) => {
-        if (password.site === item.site) {
-          return { ...password, ...form };
-        }
-        return password;
-      });
-      setPasswordArray(updatedArray);
-      localStorage.setItem("passwords", JSON.stringify(updatedArray));
-    };
-
-  // Deleting text from the local storage
-  const deleteText = (item) => {
-    const updatedArray = passwordArray.filter(
-      (password) => password.site !== item.site
-    );
-    setPasswordArray(updatedArray);
-    localStorage.setItem("passwords", JSON.stringify(updatedArray));
-    toast.error('Password Deleted', {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-      });
-  };
-
-
   return (
     <div>
-          <ToastContainer
-position="bottom-right"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick={false}
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-transition="Bounce"
-/>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition="Bounce"
+      />
       {/* Background Section Added */}
       <div>
         <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
@@ -191,7 +195,7 @@ transition="Bounce"
                 <th className="border p-4 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody> 
+            <tbody>
               {passwordArray.map((item, e) => (
                 <tr
                   key={e}
@@ -200,7 +204,11 @@ transition="Bounce"
                   <td className="border p-3">
                     <div className="flex items-center justify-between gap-2">
                       <span>{item.site}</span>
-                      <div onClick={()=>{copyText(item.site)}}>
+                      <div
+                        onClick={() => {
+                          copyText(item.site);
+                        }}
+                      >
                         <lord-icon
                           src="https://cdn.lordicon.com/zqyyfteh.json"
                           trigger="hover"
@@ -215,7 +223,11 @@ transition="Bounce"
                   <td className="border p-3">
                     <div className="flex items-center justify-between gap-2">
                       <span>{item.username}</span>
-                      <div onClick={()=>{copyText(item.username)}}>
+                      <div
+                        onClick={() => {
+                          copyText(item.username);
+                        }}
+                      >
                         <lord-icon
                           src="https://cdn.lordicon.com/zqyyfteh.json"
                           trigger="hover"
@@ -234,7 +246,11 @@ transition="Bounce"
                   <td className="border p-3">
                     <div className="flex items-center justify-between gap-2">
                       <span>{item.password}</span>
-                      <div onClick={()=>{copyText(item.password)}}>
+                      <div
+                        onClick={() => {
+                          copyText(item.password);
+                        }}
+                      >
                         <lord-icon
                           src="https://cdn.lordicon.com/zqyyfteh.json"
                           trigger="hover"
@@ -248,7 +264,12 @@ transition="Bounce"
 
                   <td className="border p-3">
                     <div className="flex gap-4 justify-center items-center">
-                      <div className="edit" onClick={()=>{editText(item)}}>
+                      <div
+                        className="edit"
+                        onClick={() => {
+                          editPassword(item.id);
+                        }}
+                      >
                         <lord-icon
                           src="https://cdn.lordicon.com/exymduqj.json"
                           trigger="hover"
@@ -258,7 +279,12 @@ transition="Bounce"
                         ></lord-icon>
                       </div>
 
-                      <div className="delete" onClick={()=>{deleteText(item)}}>  
+                      <div
+                        className="delete"
+                        onClick={() => {
+                          deletePassword(item.id);
+                        }}
+                      >
                         <lord-icon
                           src="https://cdn.lordicon.com/hwjcdycb.json"
                           trigger="morph"
